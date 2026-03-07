@@ -1,16 +1,44 @@
-# React + Vite
+# med-web Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application built with React, Vite, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React
+- JavaScript
+- Tailwind CSS
+- Fetch API
 
-## React Compiler
+## Architecture
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+This project uses folder-based separation of responsibilities:
 
-## Expanding the ESLint configuration
+```
+src/
+	components/
+	pages/
+	features/
+	services/
+	hooks/
+	utils/
+	App.jsx
+	main.jsx
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Rules
+
+- UI components must not contain API logic.
+- All API communication goes through `src/services/`.
+- Pages handle view composition and flow.
+- Components should stay small and reusable.
+
+## Environment Variables
+
+- `VITE_API_URL`: backend base URL used by service functions.
+
+## Scripts
+
+- `npm run dev`
+- `npm run build`
+- `npm run preview`
+- `npm run lint`

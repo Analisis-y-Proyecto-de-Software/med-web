@@ -1,0 +1,89 @@
+# Project Context – Frontend
+
+## Description
+
+This repository contains the frontend of the application.
+The interface is built using React and Tailwind CSS.
+
+The goal of this repository is to manage the user interface and communicate with the backend API.
+
+The frontend is deployed on Vercel.
+
+## Technologies
+
+React
+JavaScript
+Tailwind CSS
+Fetch API
+
+## Project Architecture
+
+The project follows a simple architecture based on separation of responsibilities using folders.
+
+src/
+
+components
+pages
+features
+services
+hooks
+utils
+
+Main files:
+
+App.jsx
+main.jsx
+
+## Folder Structure
+
+components
+
+Contains reusable UI components.
+Components should be small, reusable, and free of complex business logic.
+
+pages
+
+Contains the main application screens.
+Each file represents a full page or view.
+
+services
+
+Contains all API communication logic.
+HTTP requests must be centralized in this folder.
+
+hooks
+
+Contains custom React hooks.
+
+utils
+
+Reusable helper functions that do not depend on React.
+
+## Architecture Rules
+
+UI components should not contain API communication logic.
+
+All backend communication must go through the services folder.
+
+Pages should handle layout composition and UI flow.
+
+Components must remain reusable and maintainable.
+
+## Environment Variables
+
+Environment variables are used to define the backend API URL.
+
+Example:
+
+VITE_API_URL
+
+These variables should be used from the services that perform API calls.
+
+## Notes for AI Assistants
+
+When generating code for this project:
+
+* Respect the existing folder structure.
+* Do not introduce unnecessary architectural layers.
+* Prefer small and reusable components.
+* Keep the code simple and readable.
