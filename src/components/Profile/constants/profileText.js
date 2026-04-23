@@ -1,0 +1,39 @@
+export const PROFILE_UI = {
+  title: 'Seguridad de la Cuenta',
+  subtitle: 'Administra MFA y sesiones activas',
+  mfaTitle: 'Autenticación TOTP',
+  mfaDescriptionEnabled: 'MFA activado — Tu cuenta está protegida con verificación en 2 pasos',
+  mfaDescriptionDisabled: 'MFA opcional — Activa la verificación en 2 pasos para mayor seguridad',
+  mfaStatusEnabled: 'Activo',
+  mfaStatusDisabled: 'Inactivo',
+  qrTitle: 'Escanea el código QR',
+  qrDescription: 'Abre tu app de autenticacion o Authy y escanea este codigo. Luego ingresa los 6 digitos que te genera la app.',
+  cancel: 'Cancelar',
+  verifyAndEnable: 'Verificar y Activar',
+  disableMfa: 'Deshabilitar MFA',
+  enableMfa: 'Habilitar MFA',
+  devicesTitle: 'Dispositivos Vinculados',
+  devicesDescription: 'Gestiones las sesiones activas asociadas a tu cuenta.',
+  deviceLabel: 'Dispositivo',
+  lastAccess: 'Último acceso:',
+  closeSessionInDeviceTitle: 'Cerrar sesión en este dispositivo',
+  unlinkDevice: 'Desvincular',
+  noTrustedDevices: 'No tienes registrado ningún equipo confiable.',
+  dangerZoneTitle: 'Zona de Peligro',
+  dangerZoneDescription: 'Administra la seguridad global de tu cuenta.',
+  dangerZoneBody: 'Si dejaste tu cuenta abierta en un dispositivo público (como un cibercafé) y no recuerdas haber cerrado sesión, puedes revocar inmediatamente los accesos de TODOS los dispositivos del mundo haciendo click aquí. Esto también cerrará tu sesión actual.',
+  closeAllSessions: 'Cerrar sesión en TODOS los dispositivos',
+  globalSignOutConfirm: '¿Estás seguro que deseas cerrar sesión en TODOS tus dispositivos? Esto te sacará inmediatamente de esta computadora también.'
+};
+
+export const PROFILE_MESSAGES = {
+  setupMfaError: (message) => `Error iniciando configuración MFA: ${message}`,
+  invalidCode: (message) => `Código inválido: ${message}`,
+  mfaEnabledSuccess: '¡MFA habilitado correctamente! Tu cuenta ahora tiene doble protección. 🛡️',
+  disableMfaError: (message) => `Error deshabilitando MFA: ${message}`,
+  mfaDisabledSuccess: 'MFA deshabilitado correctamente.',
+  forgetDeviceSuccess: 'Dispositivo desvinculado exitosamente.',
+  forgetCurrentDeviceSuccess: 'El dispositivo actual ha sido olvidado.',
+  forgetDeviceError: (message) => `Error olvidando dispositivo: ${message}`,
+  globalSignOutError: (message) => `Error al revocar todas las sesiones: ${message}`
+};
