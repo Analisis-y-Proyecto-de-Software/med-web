@@ -15,8 +15,6 @@ function AuthShell({ children }) {
   return (
     <div className="min-h-screen w-full bg-[#141414] p-1">
       <div className="min-h-[calc(100vh-0.5rem)] w-full relative overflow-hidden bg-[#f8f9fa] flex items-center justify-center p-4">
-        <div className="absolute top-[-14%] left-[-8%] w-[32rem] h-[32rem] rounded-full bg-[#9fc8cf]/45 blur-[90px] pointer-events-none" />
-        <div className="absolute bottom-[-22%] right-[-12%] w-[30rem] h-[30rem] rounded-full bg-[#c9d6dd]/55 blur-[90px] pointer-events-none" />
         <div className="z-10 w-full flex justify-center">{children}</div>
       </div>
     </div>
@@ -33,7 +31,7 @@ function DashboardShell({ user, onSignOut, children }) {
     'block w-full text-center rounded-md bg-[#d8d9dd] text-[#212121] py-2 text-xs font-medium ring-1 ring-[#c4c5ca] transition-colors'
 
   return (
-    <div className="min-h-screen w-full bg-[#141414] p-1">
+    <div className="min-h-screen w-full bg-[#141414]">
       <div className="min-h-[calc(100vh-0.5rem)] w-full bg-[#f8f9fa] md:grid md:grid-cols-[220px_1fr]">
         <aside className="bg-[#00343a] text-white p-3 flex flex-col">
           <h1 className="text-2xl font-bold tracking-tight mb-5">FocusMind</h1>

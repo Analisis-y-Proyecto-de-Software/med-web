@@ -34,17 +34,17 @@ export default function Login({ onNavigate, onLoginSuccess }) {
   // Vistas secundarias
   if (step === LOGIN_STEPS.SETUP_TOTP || step === LOGIN_STEPS.CONFIRM_TOTP || step === LOGIN_STEPS.CONFIRM_EMAIL_OTP) {
     return (
-      <div className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500">
+      <div className="w-full max-w-md">
         <AuthPanel className="text-center">
-          <div className="w-16 h-16 bg-[#d8e7ea] text-[#00343a] rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-14 h-14 bg-[#d8e7ea] text-[#00343a] rounded-full flex items-center justify-center mx-auto mb-5">
             {step === LOGIN_STEPS.SETUP_TOTP ? <QrCode className="w-8 h-8" /> : (step === LOGIN_STEPS.CONFIRM_EMAIL_OTP ? <Mail className="w-8 h-8" /> : <ShieldCheck className="w-8 h-8" />)}
           </div>
           
-          <h2 className="text-2xl font-bold text-[#1f2328] mb-2">
+          <h2 className="text-2xl font-semibold text-[#1f2328] mb-2">
             {step === LOGIN_STEPS.SETUP_TOTP ? LOGIN_UI.setupTotpTitle : (step === LOGIN_STEPS.CONFIRM_EMAIL_OTP ? LOGIN_UI.confirmEmailOtpTitle : LOGIN_UI.confirmTotpTitle)}
           </h2>
           
-          <p className="text-gray-600 mb-6 text-sm">
+          <p className="text-gray-600 mb-5 text-sm">
             {step === LOGIN_STEPS.SETUP_TOTP 
               ? LOGIN_UI.setupTotpDescription
               : (step === LOGIN_STEPS.CONFIRM_EMAIL_OTP 
@@ -73,7 +73,7 @@ export default function Login({ onNavigate, onLoginSuccess }) {
 
             <button 
               disabled={loading || mfaCode.slice(0, step === LOGIN_STEPS.CONFIRM_EMAIL_OTP ? 8 : 6).some(c => c === '')}
-              className="w-full py-3 mt-8 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+              className="w-full py-3 mt-6 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-colors"
             >
               {loading ? <Loader2 className="animate-spin h-5 w-5" /> : LOGIN_UI.verifyAndEnter}
             </button>
@@ -91,11 +91,11 @@ export default function Login({ onNavigate, onLoginSuccess }) {
   }
 
   return (
-    <div className="w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="w-full max-w-md">
       <AuthPanel>
         
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-[#00343a] tracking-tight">
+        <div className="text-center mb-7">
+          <h2 className="text-3xl font-semibold text-[#00343a]">
             {LOGIN_UI.title}
           </h2>
           <p className="text-sm text-gray-600 mt-2">
@@ -128,10 +128,10 @@ export default function Login({ onNavigate, onLoginSuccess }) {
             <button 
               type="submit"
               disabled={loading || !email}
-              className="w-full py-3 mt-6 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 group transition-all active:scale-[0.98]"
+              className="w-full py-3 mt-6 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-colors"
             >
               {loading ? <Loader2 className="animate-spin h-5 w-5" /> : LOGIN_UI.continue}
-              {!loading && <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />}
+              {!loading && <ArrowRight className="h-4 w-4" />}
             </button>
             
           </form>
@@ -172,10 +172,10 @@ export default function Login({ onNavigate, onLoginSuccess }) {
             <button 
               type="submit"
               disabled={loading}
-              className="w-full py-3 mt-6 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 group transition-all active:scale-[0.98]"
+              className="w-full py-3 mt-6 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-colors"
             >
               {loading ? <Loader2 className="animate-spin h-5 w-5" /> : LOGIN_UI.enter}
-              {!loading && <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />}
+              {!loading && <ArrowRight className="h-4 w-4" />}
             </button>
 
           </form>

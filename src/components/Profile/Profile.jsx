@@ -39,7 +39,7 @@ export default function Profile({ onBack }) {
   }
 
   return (
-    <div className="w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12">
+    <div className="w-full max-w-4xl mx-auto pb-12">
       <ProfileHeader onBack={onBack} />
 
       <ProfileFeedback error={error} success={success} />
