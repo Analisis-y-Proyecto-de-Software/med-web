@@ -11,7 +11,8 @@ export default function AuthTextField({
   icon: Icon,
   inputClassName = '',
   wrapperClassName = 'space-y-1',
-  labelClassName = 'text-sm font-medium text-gray-700 dark:text-gray-300 ml-1'
+  labelClassName = 'text-sm font-medium text-gray-700 dark:text-gray-300 ml-1',
+  inputProps = {}
 }) {
   return (
     <div className={wrapperClassName}>
@@ -31,6 +32,7 @@ export default function AuthTextField({
           onChange={onChange}
           placeholder={placeholder}
           className={inputClassName}
+          {...inputProps}
         />
       </div>
     </div>

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight, Loader2, ShieldCheck, QrCode } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
+import { confirmResetPassword, resetPassword } from 'aws-amplify/auth';
 import CodeInputGroup from './CodeInputGroup';
 import useLoginFlow from '../../hooks/useLoginFlow';
 import AuthPanel from './ui/AuthPanel';
@@ -9,8 +10,18 @@ import AuthTextField from './ui/AuthTextField';
 import AuthCheckboxField from './ui/AuthCheckboxField';
 import { LOGIN_UI } from './constants/authText';
 import { AUTH_METHODS, LOGIN_STEPS } from './constants/authState';
+import { mapAuthError } from './utils/authErrorMapper';
 
 export default function Login({ onNavigate, onLoginSuccess }) {
+  const [isResetMode, setIsResetMode] = useState(false);
+  const [resetStep, setResetStep] = useState('request');
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetCode, setResetCode] = useState('');
+  const [resetNewPassword, setResetNewPassword] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetError, setResetError] = useState('');
+  const [resetSuccess, setResetSuccess] = useState('');
+
   const {
     step,
     setStep,
@@ -30,6 +41,90 @@ export default function Login({ onNavigate, onLoginSuccess }) {
   } = useLoginFlow({ onLoginSuccess });
 
   const visibleError = error;
+
+  const openResetMode = () => {
+    setIsResetMode(true);
+    setResetStep('request');
+    setResetEmail(email || '');
+    setResetCode('');
+    setResetNewPassword('');
+    setResetError('');
+    setResetSuccess('');
+  };
+
+  const closeResetMode = () => {
+    setIsResetMode(false);
+    setResetStep('request');
+    setResetCode('');
+    setResetNewPassword('');
+    setResetError('');
+    setResetSuccess('');
+  };
+
+  const handleSendResetCode = async () => {
+    if (!resetEmail.trim()) {
+      setResetError(LOGIN_UI.resetEmailRequired);
+      return;
+    }
+
+    setResetLoading(true);
+    setResetError('');
+    setResetSuccess('');
+
+    try {
+      await resetPassword({ username: resetEmail.trim() });
+      setResetStep('confirm');
+      setResetSuccess(LOGIN_UI.resetCodeSent(resetEmail.trim()));
+    } catch (err) {
+      setResetError(mapAuthError(err, LOGIN_UI.resetSendCodeError));
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const handleConfirmResetPassword = async () => {
+    if (!resetEmail.trim()) {
+      setResetError(LOGIN_UI.resetEmailRequired);
+      return;
+    }
+
+    if (!resetCode.trim()) {
+      setResetError(LOGIN_UI.resetCodeRequired);
+      return;
+    }
+
+    if (resetCode.trim().length !== 6) {
+      setResetError(LOGIN_UI.resetCodeLengthError);
+      return;
+    }
+
+    if (!resetNewPassword.trim()) {
+      setResetError(LOGIN_UI.resetNewPasswordRequired);
+      return;
+    }
+
+    setResetLoading(true);
+    setResetError('');
+    setResetSuccess('');
+
+    try {
+      await confirmResetPassword({
+        username: resetEmail.trim(),
+        confirmationCode: resetCode.trim(),
+        newPassword: resetNewPassword
+      });
+      setEmail(resetEmail.trim());
+      setPassword('');
+      setResetSuccess(LOGIN_UI.resetPasswordSuccess);
+      setTimeout(() => {
+        closeResetMode();
+      }, 800);
+    } catch (err) {
+      setResetError(mapAuthError(err, LOGIN_UI.resetConfirmError));
+    } finally {
+      setResetLoading(false);
+    }
+  };
 
   // Vistas secundarias
   if (step === LOGIN_STEPS.SETUP_TOTP || step === LOGIN_STEPS.CONFIRM_TOTP || step === LOGIN_STEPS.CONFIRM_EMAIL_OTP) {
@@ -64,15 +159,13 @@ export default function Login({ onNavigate, onLoginSuccess }) {
             <CodeInputGroup
               value={mfaCode}
               onChange={setMfaCode}
-              length={step === LOGIN_STEPS.CONFIRM_EMAIL_OTP ? 8 : 6}
+              length={6}
               idPrefix="mfa"
-              inputClassName={`text-center font-bold bg-white border border-[#cfd5db] rounded-xl focus:ring-2 focus:ring-[#00343a]/20 focus:border-[#00343a]/40 outline-none transition-all ${
-                step === LOGIN_STEPS.CONFIRM_EMAIL_OTP ? 'w-10 h-12 text-lg' : 'w-12 h-14 text-xl'
-              }`}
+              inputClassName="w-12 h-14 text-center text-xl font-bold bg-white border border-[#cfd5db] rounded-xl focus:ring-2 focus:ring-[#00343a]/20 focus:border-[#00343a]/40 outline-none transition-all"
             />
 
             <button 
-              disabled={loading || mfaCode.slice(0, step === LOGIN_STEPS.CONFIRM_EMAIL_OTP ? 8 : 6).some(c => c === '')}
+              disabled={loading || mfaCode.slice(0, 6).some(c => c === '')}
               className="w-full py-3 mt-6 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-colors"
             >
               {loading ? <Loader2 className="animate-spin h-5 w-5" /> : LOGIN_UI.verifyAndEnter}
@@ -85,6 +178,120 @@ export default function Login({ onNavigate, onLoginSuccess }) {
               {LOGIN_UI.cancel}
             </button>
           </form>
+        </AuthPanel>
+      </div>
+    );
+  }
+
+  if (isResetMode) {
+    return (
+      <div className="w-full max-w-md">
+        <AuthPanel>
+          <div className="text-center mb-7">
+            <h2 className="text-3xl font-semibold text-[#00343a]">{LOGIN_UI.resetTitle}</h2>
+            <p className="text-sm text-gray-600 mt-2">{LOGIN_UI.resetSubtitle}</p>
+          </div>
+
+          <AuthErrorMessage message={resetError} />
+
+          {resetSuccess && (
+            <div className="mb-4 p-3 rounded-xl border bg-[#d8e7ea] border-[#b8d0d5] text-[#00343a]">
+              <p className="text-sm leading-5">{resetSuccess}</p>
+            </div>
+          )}
+
+          {resetStep === 'request' && (
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); void handleSendResetCode(); }}>
+              <AuthTextField
+                label={LOGIN_UI.emailLabel}
+                type="email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                required
+                placeholder={LOGIN_UI.emailPlaceholder}
+                icon={Mail}
+                inputClassName="w-full pl-10 pr-4 py-3 bg-white border border-[#cfd5db] rounded-xl focus:ring-2 focus:ring-[#00343a]/20 focus:border-[#00343a]/40 outline-none transition-all"
+              />
+
+              <button
+                type="submit"
+                disabled={resetLoading}
+                className="w-full py-3 mt-6 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-colors"
+              >
+                {resetLoading ? <Loader2 className="animate-spin h-5 w-5" /> : LOGIN_UI.sendResetCode}
+              </button>
+            </form>
+          )}
+
+          {resetStep === 'confirm' && (
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); void handleConfirmResetPassword(); }}>
+              <AuthTextField
+                label={LOGIN_UI.emailLabel}
+                type="email"
+                value={resetEmail}
+                onChange={() => {}}
+                inputProps={{ readOnly: true, disabled: true, autoComplete: 'off' }}
+                inputClassName="w-full px-4 py-3 bg-[#f5f6f8] border border-[#cfd5db] rounded-xl text-gray-500 outline-none"
+              />
+
+              <AuthTextField
+                label={LOGIN_UI.resetCodeLabel}
+                type="text"
+                value={resetCode}
+                onChange={(e) => setResetCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                required
+                placeholder={LOGIN_UI.resetCodePlaceholder}
+                inputProps={{
+                  inputMode: 'numeric',
+                  autoComplete: 'one-time-code',
+                  maxLength: 6,
+                  pattern: '\\d{6}',
+                  name: 'reset-code'
+                }}
+                inputClassName="w-full px-4 py-3 bg-white border border-[#cfd5db] rounded-xl focus:ring-2 focus:ring-[#00343a]/20 focus:border-[#00343a]/40 outline-none transition-all"
+              />
+
+              <AuthTextField
+                label={LOGIN_UI.resetNewPasswordLabel}
+                type="password"
+                value={resetNewPassword}
+                onChange={(e) => setResetNewPassword(e.target.value)}
+                required
+                placeholder={LOGIN_UI.resetNewPasswordPlaceholder}
+                icon={Lock}
+                inputClassName="w-full pl-10 pr-4 py-3 bg-white border border-[#cfd5db] rounded-xl focus:ring-2 focus:ring-[#00343a]/20 focus:border-[#00343a]/40 outline-none transition-all"
+              />
+
+              <button
+                type="submit"
+                disabled={resetLoading || resetCode.length !== 6 || !resetNewPassword.trim()}
+                className="w-full py-3 mt-6 bg-[#00343a] hover:bg-[#00464d] disabled:opacity-70 text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-colors"
+              >
+                {resetLoading ? <Loader2 className="animate-spin h-5 w-5" /> : LOGIN_UI.resetPasswordButton}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setResetStep('request');
+                  setResetCode('');
+                  setResetSuccess('');
+                  setResetError('');
+                }}
+                className="w-full py-2 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+              >
+                {LOGIN_UI.resendResetCode}
+              </button>
+            </form>
+          )}
+
+          <button
+            type="button"
+            onClick={closeResetMode}
+            className="w-full mt-6 py-2 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            {LOGIN_UI.backToLogin}
+          </button>
         </AuthPanel>
       </div>
     );
@@ -152,7 +359,7 @@ export default function Login({ onNavigate, onLoginSuccess }) {
 
             <AuthTextField
               label={LOGIN_UI.passwordLabel}
-              labelRight={<a href="#" className="text-xs text-[#005a64] hover:underline">{LOGIN_UI.forgotPassword}</a>}
+              labelRight={<button type="button" onClick={openResetMode} className="text-xs text-[#005a64] hover:underline">{LOGIN_UI.forgotPassword}</button>}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

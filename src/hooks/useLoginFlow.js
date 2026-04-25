@@ -15,7 +15,7 @@ export default function useLoginFlow({ onLoginSuccess }) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [mfaCode, setMfaCode] = useState(['', '', '', '', '', '', '', '']);
+  const [mfaCode, setMfaCode] = useState(['', '', '', '', '', '']);
   const [qrUri, setQrUri] = useState('');
 
   const [rememberDeviceChecked, setRememberDeviceChecked] = useState(false);
@@ -168,7 +168,7 @@ export default function useLoginFlow({ onLoginSuccess }) {
     setLoading(true);
     setError('');
 
-    const codeLen = step === LOGIN_STEPS.CONFIRM_EMAIL_OTP ? 8 : 6;
+    const codeLen = 6;
 
     try {
       const challengeResponse = mfaCode.slice(0, codeLen).join('');
