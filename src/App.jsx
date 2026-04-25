@@ -13,10 +13,12 @@ import { ChevronRight, LogOut, UserRound } from 'lucide-react'
 
 function AuthShell({ children }) {
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-slate-50 dark:bg-gray-950 flex items-center justify-center p-4 transition-colors duration-500">
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/30 dark:bg-blue-900/40 blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/30 dark:bg-indigo-900/40 blur-[100px] pointer-events-none" />
-      <div className="z-10 w-full flex justify-center">{children}</div>
+    <div className="min-h-screen w-full bg-[#141414] p-1">
+      <div className="min-h-[calc(100vh-0.5rem)] w-full relative overflow-hidden bg-[#f8f9fa] flex items-center justify-center p-4">
+        <div className="absolute top-[-14%] left-[-8%] w-[32rem] h-[32rem] rounded-full bg-[#9fc8cf]/45 blur-[90px] pointer-events-none" />
+        <div className="absolute bottom-[-22%] right-[-12%] w-[30rem] h-[30rem] rounded-full bg-[#c9d6dd]/55 blur-[90px] pointer-events-none" />
+        <div className="z-10 w-full flex justify-center">{children}</div>
+      </div>
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { AlertCircle } from 'lucide-react';
 export default function AuthErrorMessage({ message, className = '' }) {
   if (!message) return null;
 
-  const baseClassName = 'mb-4 p-3 rounded-xl border shadow-sm bg-red-50 border-red-300 text-red-800 dark:bg-red-950/60 dark:border-red-700 dark:text-red-100';
+  const baseClassName = 'mb-4 p-3 rounded-xl border shadow-sm bg-red-50 border-red-300 text-red-800';
 
   return (
     <div
