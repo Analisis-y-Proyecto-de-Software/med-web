@@ -5,10 +5,10 @@ import { Link, Navigate, Route, Routes, useLocation, useNavigate } from 'react-r
 import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 import Profile from './components/Profile/Profile'
-import DashboardPage from './components/DashboardPage'
-import TaskPage from './components/TaskPage'
-import ConcentrationPage from './components/ConcentrationPage'
-import CalendarPage from './components/CalendarPage'
+import DashboardPage from './pages/DashboardPage'
+import TaskPage from './pages/TaskPage'
+import ConcentrationPage from './pages/ConcentrationPage'
+import CalendarPage from './pages/CalendarPage'
 import { ChevronRight, LogOut, UserRound } from 'lucide-react'
 
 function AuthShell({ children }) {
