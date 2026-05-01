@@ -7,7 +7,7 @@ import Register from './components/Auth/Register'
 import Profile from './components/Profile/Profile'
 import DashboardPage from './pages/DashboardPage'
 import TaskPage from './pages/TaskPage'
-import ConcentrationPage from './pages/ConcentrationPage'
+import RegistroEmocionalPage from './pages/RegistroEmocionalPage'
 import CalendarPage from './pages/CalendarPage'
 import { ChevronRight, LogOut, UserRound } from 'lucide-react'
 
@@ -31,8 +31,8 @@ function DashboardShell({ user, onSignOut, children }) {
     'block w-full text-center rounded-md bg-[#d8d9dd] text-[#212121] py-2 text-xs font-medium ring-1 ring-[#c4c5ca] transition-colors'
 
   return (
-    <div className="min-h-screen w-full bg-[#141414]">
-      <div className="min-h-[calc(100vh-0.5rem)] w-full bg-[#f8f9fa] md:grid md:grid-cols-[220px_1fr]">
+    <div className="h-screen w-full bg-[#141414]">
+      <div className="h-full w-full bg-[#f8f9fa] md:grid md:grid-cols-[220px_1fr] overflow-hidden">
         <aside className="bg-[#00343a] text-white p-3 flex flex-col">
           <h1 className="text-2xl font-bold tracking-tight mb-5">FocusMind</h1>
 
@@ -79,7 +79,7 @@ function DashboardShell({ user, onSignOut, children }) {
           </div>
         </aside>
 
-        <main className="p-4">{children}</main>
+        <main className="p-4 h-full overflow-hidden">{children}</main>
       </div>
     </div>
   )
@@ -206,7 +206,7 @@ export default function App() {
             path="/registro-emocional"
             element={
               <DashboardShell user={user} onSignOut={handleSignOut}>
-                <ConcentrationPage />
+                <RegistroEmocionalPage />
               </DashboardShell>
             }
           />
