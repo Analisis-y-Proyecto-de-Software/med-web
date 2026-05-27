@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import TaskList from '../features/task/components/TaskList'
+import TaskDetailModal from '../features/task/components/TaskDetailModal'
 import useTasks from '../features/task/hooks/useTasks'
 
 export default function TaskPage() {
   const { tasks, loading, error } = useTasks()
+  const [selectedTask, setSelectedTask] = useState(null)
 
   return (
     <section className="h-full bg-[#f8f9fa]">
@@ -37,9 +40,11 @@ export default function TaskPage() {
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto space-y-3">
-          <TaskList tasks={tasks} loading={loading} error={error} />
+          <TaskList tasks={tasks} loading={loading} error={error} onViewTask={setSelectedTask} />
         </div>
       </div>
+
+      <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />
     </section>
   )
 }
