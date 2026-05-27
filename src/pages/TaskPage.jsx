@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import TaskList from '../features/task/components/TaskList'
 import TaskDetailModal from '../features/task/components/TaskDetailModal'
+import CreateTaskPanel from '../features/task/components/CreateTaskPanel'
 import useTasks from '../features/task/hooks/useTasks'
 
 export default function TaskPage() {
-  const { tasks, loading, error } = useTasks()
+  const { tasks, loading, error, refetch } = useTasks()
   const [selectedTask, setSelectedTask] = useState(null)
+  const [showCreate, setShowCreate] = useState(false)
 
   return (
     <section className="h-full bg-[#f8f9fa]">
@@ -13,6 +15,7 @@ export default function TaskPage() {
         <header className="flex items-center justify-end">
           <button
             type="button"
+            onClick={() => setShowCreate(true)}
             className="rounded-xl bg-[#8aa5a0] px-6 py-3 text-lg font-semibold text-white shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
           >
             + Nueva Tarea
@@ -45,6 +48,12 @@ export default function TaskPage() {
       </div>
 
       <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />
+
+      <CreateTaskPanel
+        isOpen={showCreate}
+        onClose={() => setShowCreate(false)}
+        onCreated={refetch}
+      />
     </section>
   )
 }

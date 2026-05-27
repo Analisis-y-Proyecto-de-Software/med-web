@@ -9,3 +9,17 @@ export async function fetchTasks(userId) {
 
   return response.json()
 }
+
+export async function createTask(data) {
+  const response = await apiFetch('/tasks/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+
+  if (!response.ok) {
+    throw new Error('No se pudo crear la tarea.')
+  }
+
+  return response.json()
+}
