@@ -10,6 +10,16 @@ export async function fetchTasks(userId) {
   return response.json()
 }
 
+export async function deleteTask(taskId) {
+  const response = await apiFetch(`/tasks/${encodeURIComponent(taskId)}`, {
+    method: 'DELETE',
+  })
+
+  if (!response.ok) {
+    throw new Error('No se pudo eliminar la tarea.')
+  }
+}
+
 export async function updateTaskStatus(taskId, status) {
   const response = await apiFetch(`/tasks/${encodeURIComponent(taskId)}/status`, {
     method: 'PATCH',

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import Modal from './Modal'
-import { updateTaskStatus } from '../services/taskApi'
+import { updateTaskStatus, deleteTask } from '../services/taskApi'
 
 const STATUS_LABELS = {
   pending:     'Pendiente',
@@ -42,6 +42,7 @@ const formatHours = (value) => {
 export default function TaskDetailModal({ task, onClose, onUpdated }) {
   const [localTask, setLocalTask] = useState(task)
   const [loadingStatus, setLoadingStatus] = useState(false)
+  const [loadingDelete, setLoadingDelete] = useState(false)
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -51,6 +52,20 @@ export default function TaskDetailModal({ task, onClose, onUpdated }) {
   const statusColor = STATUS_COLORS[localTask?.status] ?? 'bg-gray-200 text-gray-700'
   const statusLabel = STATUS_LABELS[localTask?.status] ?? localTask?.status
   const priorityLabel = PRIORITY_LABELS[localTask?.priority] ?? localTask?.priority
+
+  const handleDelete = async () => {
+    setError(null)
+    setLoadingDelete(true)
+    try {
+      await deleteTask(localTask.id)
+      onUpdated?.()
+      onClose()
+    } catch {
+      setError('No se pudo eliminar la tarea. Intenta de nuevo.')
+    } finally {
+      setLoadingDelete(false)
+    }
+  }
 
   const handleStatusChange = async (newStatus) => {
     setError(null)
@@ -139,9 +154,11 @@ export default function TaskDetailModal({ task, onClose, onUpdated }) {
 
           <button
             type="button"
-            className="px-6 py-3 rounded-2xl bg-[#e0e0e0] text-[#0b2b2a] font-semibold text-base hover:bg-[#d0d0d0] transition-colors"
+            disabled={loadingDelete}
+            onClick={handleDelete}
+            className="px-6 py-3 rounded-2xl bg-[#e0e0e0] text-[#0b2b2a] font-semibold text-base hover:bg-[#d0d0d0] disabled:opacity-60 transition-colors"
           >
-            Eliminar
+            {loadingDelete ? 'Eliminando...' : 'Eliminar'}
           </button>
 
           {localTask?.status === 'pending' && (
