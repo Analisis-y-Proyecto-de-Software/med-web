@@ -14,7 +14,6 @@ const STATUS_COLORS = {
 }
 
 const PRIORITY_LABELS = {
-  urgent: 'Urgente',
   high: 'Alta',
   medium: 'Media',
   low: 'Baja',
@@ -56,7 +55,7 @@ export default function TaskDetailModal({ task, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="ml-4 h-9 w-9 flex-shrink-0 grid place-items-center rounded-full hover:bg-gray-100 text-[#0b2b2a]"
+            className="ml-4 h-9 w-9 shrink-0 grid place-items-center rounded-full hover:bg-gray-100 text-[#0b2b2a]"
             aria-label="Cerrar"
           >
             <X className="h-6 w-6" />
@@ -103,19 +102,19 @@ export default function TaskDetailModal({ task, onClose }) {
         <div className="flex gap-4 mt-8">
           <button
             type="button"
-            className="px-6 py-3 rounded-[16px] bg-[#0b2b2a] text-white font-semibold text-base hover:bg-[#12403e] transition-colors"
+            className="px-6 py-3 rounded-2xl bg-[#0b2b2a] text-white font-semibold text-base hover:bg-[#12403e] transition-colors"
           >
             Finalizar
           </button>
           <button
             type="button"
-            className="px-6 py-3 rounded-[16px] bg-[#e0e0e0] text-[#0b2b2a] font-semibold text-base hover:bg-[#d0d0d0] transition-colors"
+            className="px-6 py-3 rounded-2xl bg-[#e0e0e0] text-[#0b2b2a] font-semibold text-base hover:bg-[#d0d0d0] transition-colors"
           >
             Eliminar
           </button>
           <button
             type="button"
-            className="px-6 py-3 rounded-[16px] border-2 border-[#0b2b2a] text-[#0b2b2a] font-semibold text-base hover:bg-gray-50 transition-colors"
+            className="px-6 py-3 rounded-2xl border-2 border-[#0b2b2a] text-[#0b2b2a] font-semibold text-base hover:bg-gray-50 transition-colors"
           >
             Empezar
           </button>

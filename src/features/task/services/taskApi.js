@@ -10,8 +10,8 @@ export async function fetchTasks(userId) {
   return response.json()
 }
 
-export async function createTask(data) {
-  const response = await apiFetch('/tasks/create', {
+export async function createTask(userId, data) {
+  const response = await apiFetch(`/tasks/${encodeURIComponent(userId)}/create`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

@@ -1,12 +1,20 @@
 import { useState } from 'react'
+import { getCurrentUser } from 'aws-amplify/auth'
 import SidePanel from './SidePanel'
 import { createTask } from '../services/taskApi'
+
+const PRIORITY_OPTIONS = [
+  { value: 'high',   label: 'Alta' },
+  { value: 'medium', label: 'Media' },
+  { value: 'low',    label: 'Baja' },
+]
 
 const EMPTY = {
   name: '',
   description: '',
   due_date: '',
   estimated_time_hours: '',
+  priority: '',
   attachment_link: '',
 }
 
@@ -33,12 +41,15 @@ export default function CreateTaskPanel({ isOpen, onClose, onCreated }) {
     setError(null)
     setLoading(true)
     try {
-      await createTask({
-        name: form.name,
-        description: form.description,
-        due_date: form.due_date || null,
-        estimated_time_hours: form.estimated_time_hours ? parseFloat(form.estimated_time_hours) : null,
-        attachment_link: form.attachment_link || null,
+      const currentUser = await getCurrentUser()
+      const userId = currentUser?.userId || currentUser?.username
+      await createTask(userId, {
+        titulo: form.name,
+        descripcion: form.description,
+        fechaFin: form.due_date || null,
+        tiempoEstimado: form.estimated_time_hours ? parseFloat(form.estimated_time_hours) : null,
+        prioridad: form.priority || null,
+        linkAdjunto: form.attachment_link || null,
       })
       onCreated?.()
       handleClose()
@@ -116,6 +127,24 @@ export default function CreateTaskPanel({ isOpen, onClose, onCreated }) {
         </div>
 
         <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-[#0b2b2a]" htmlFor="priority">
+            Prioridad
+          </label>
+          <select
+            id="priority"
+            name="priority"
+            value={form.priority}
+            onChange={handleChange}
+            className={inputClass}
+          >
+            <option value="">Seleccionar prioridad</option>
+            {PRIORITY_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-col gap-1">
           <label className="text-sm font-medium text-[#0b2b2a]" htmlFor="attachment_link">
             Link Adjunto
           </label>
@@ -138,14 +167,14 @@ export default function CreateTaskPanel({ isOpen, onClose, onCreated }) {
           <button
             type="submit"
             disabled={loading}
-            className="px-10 py-3 rounded-[16px] bg-[#0b2b2a] text-white font-semibold text-base hover:bg-[#12403e] disabled:opacity-60 transition-colors"
+            className="px-10 py-3 rounded-2xl bg-[#0b2b2a] text-white font-semibold text-base hover:bg-[#12403e] disabled:opacity-60 transition-colors"
           >
             {loading ? 'Creando...' : 'Crear'}
           </button>
           <button
             type="button"
             onClick={handleClose}
-            className="px-10 py-3 rounded-[16px] bg-[#e0e0e0] text-[#0b2b2a] font-semibold text-base hover:bg-[#d0d0d0] transition-colors"
+            className="px-10 py-3 rounded-2xl bg-[#e0e0e0] text-[#0b2b2a] font-semibold text-base hover:bg-[#d0d0d0] transition-colors"
           >
             Cancelar
           </button>
