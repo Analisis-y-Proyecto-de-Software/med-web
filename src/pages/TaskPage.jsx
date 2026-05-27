@@ -47,7 +47,7 @@ export default function TaskPage() {
         </div>
       </div>
 
-      <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} />
+      <TaskDetailModal task={selectedTask} onClose={() => setSelectedTask(null)} onUpdated={refetch} />
 
       <CreateTaskPanel
         isOpen={showCreate}
