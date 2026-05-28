@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getCurrentUser } from 'aws-amplify/auth'
 import { fetchTasks } from '../services/taskApi'
 
@@ -6,6 +6,9 @@ export default function useTasks() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+
+  const [tick, setTick] = useState(0)
+  const refetch = useCallback(() => setTick((t) => t + 1), [])
 
   useEffect(() => {
     let isMounted = true
@@ -46,11 +49,12 @@ export default function useTasks() {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [tick])
 
   return {
     tasks,
     loading,
     error,
+    refetch,
   }
 }

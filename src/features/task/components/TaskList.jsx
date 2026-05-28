@@ -22,7 +22,7 @@ const formatDuration = (value) => {
   return value
 }
 
-export default function TaskList({ tasks, loading, error }) {
+export default function TaskList({ tasks, loading, error, onViewTask }) {
   if (loading) {
     return (
       <div className="rounded-[18px] bg-[#00343a] px-7 py-6 text-xl text-white/80 shadow-[0_6px_16px_rgba(0,0,0,0.15)]">
@@ -76,6 +76,7 @@ export default function TaskList({ tasks, loading, error }) {
               type="button"
               className="h-12 w-12 grid place-items-center text-white/80 hover:text-white"
               aria-label="Ver tarea"
+              onClick={() => onViewTask?.(task)}
             >
               <Eye className="h-8 w-8" />
             </button>
