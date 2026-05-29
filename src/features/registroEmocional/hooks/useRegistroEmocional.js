@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { getCurrentUser } from 'aws-amplify/auth'
-import { fetchEmotionalRecords } from '../services/registroEmocionalApi'
+import {
+  fetchEmotionalRecords,
+  submitEmotionalRecord,
+} from '../services/registroEmocionalApi'
 
 export default function useRegistroEmocional() {
   const [records, setRecords] = useState([])
@@ -52,5 +55,35 @@ export default function useRegistroEmocional() {
     records,
     loading,
     error,
+    submitRecord: async ({ name, id }) => {
+      setLoading(true)
+      setError('')
+
+      try {
+        const currentUser = await getCurrentUser()
+        const userId = currentUser?.userId || currentUser?.username
+
+        if (!userId) {
+          throw new Error('No se encontro el usuario actual.')
+        }
+
+        const payload = {
+          name: name || undefined,
+          emotional_state_id: id || undefined,
+          created_at: new Date().toISOString(),
+        }
+
+        const created = await submitEmotionalRecord(userId, payload)
+
+        setRecords((prev) => (Array.isArray(prev) ? [created, ...prev] : [created]))
+
+        return created
+      } catch (err) {
+        setError(err?.message || 'Error al registrar la emoción.')
+        throw err
+      } finally {
+        setLoading(false)
+      }
+    },
   }
 }
