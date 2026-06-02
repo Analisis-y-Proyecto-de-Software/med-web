@@ -16,6 +16,16 @@ export async function fetchCalendarMonth(userId, month, year) {
   return response.json()
 }
 
+export async function fetchDailySummary(userId, date) {
+  const response = await apiFetch(`/summary/${encodeURIComponent(userId)}?date=${date}`)
+
+  if (!response.ok) {
+    throw new Error('No se pudo cargar el resumen del día.')
+  }
+
+  return response.json()
+}
+
 export async function fetchCognitiveLoad(userId, month, year) {
   const monthName = MONTH_NAMES[month - 1]
   const response = await apiFetch(

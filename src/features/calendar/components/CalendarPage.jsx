@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Calendar } from '../Calendar'
 import useCalendarData from '../hooks/useCalendarData'
 import TodayEmotionPanel from './TodayEmotionPanel'
 import CognitiveLoadGauge from './CognitiveLoadGauge'
+import DailySummaryCard from './DailySummaryCard'
 
 const CalendarPage = () => {
   const today = new Date()
@@ -19,7 +20,14 @@ const CalendarPage = () => {
   }
 
   const isCurrentMonth = month === today.getMonth() + 1 && year === today.getFullYear()
-  const todayEntry = isCurrentMonth ? calendarData[today.getDate()] : null
+  const todayDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+
+  // Cache today's entry once loaded so navigating to other months doesn't clear the panel
+  const todayEntryCache = useRef(null)
+  if (isCurrentMonth && !loading) {
+    todayEntryCache.current = calendarData[today.getDate()] ?? null
+  }
+  const panelLoading = loading && todayEntryCache.current === null
 
   return (
     <div className="flex flex-col gap-6 h-full">
@@ -34,9 +42,10 @@ const CalendarPage = () => {
           />
         </div>
 
-        <div className="w-64 shrink-0 flex flex-col gap-6">
-          <TodayEmotionPanel entry={todayEntry} loading={loading} />
-          <CognitiveLoadGauge month={month} year={year} />
+        <div className="w-64 shrink-0 flex flex-col gap-6 overflow-y-auto">
+          <TodayEmotionPanel entry={todayEntryCache.current} loading={panelLoading} />
+          <CognitiveLoadGauge month={today.getMonth() + 1} year={today.getFullYear()} />
+          <DailySummaryCard date={todayDate} />
         </div>
       </div>
     </div>
