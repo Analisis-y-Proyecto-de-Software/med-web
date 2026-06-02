@@ -4,6 +4,7 @@ import useCalendarData from '../hooks/useCalendarData'
 import TodayEmotionPanel from './TodayEmotionPanel'
 import CognitiveLoadGauge from './CognitiveLoadGauge'
 import DailySummaryCard from './DailySummaryCard'
+import FocusModeButton from './FocusModeButton'
 
 const CalendarPage = () => {
   const today = new Date()
@@ -46,6 +47,7 @@ const CalendarPage = () => {
           <TodayEmotionPanel entry={todayEntryCache.current} loading={panelLoading} />
           <CognitiveLoadGauge month={today.getMonth() + 1} year={today.getFullYear()} />
           <DailySummaryCard date={todayDate} />
+          <FocusModeButton />
         </div>
       </div>
     </div>
