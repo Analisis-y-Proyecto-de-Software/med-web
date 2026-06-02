@@ -75,9 +75,9 @@ export function Calendar({ className, calendarData = {}, loading = false, ...pro
         <CalendarGridBody>
           {(date) => {
             const entry = calendarData[date.day]
-            const emotion = entry?.emotional_state ? EMOTION_MAP[entry.emotional_state] : null
+            const emotions = (entry?.emotional_states ?? []).map((s) => EMOTION_MAP[s]).filter(Boolean)
             const taskCount = entry?.tasks_due_count ?? 0
-            const hasContent = emotion || taskCount > 0
+            const hasContent = emotions.length > 0 || taskCount > 0
 
             return (
               <CalendarCell
@@ -117,13 +117,17 @@ export function Calendar({ className, calendarData = {}, loading = false, ...pro
                             {taskCount} {taskCount === 1 ? 'tarea' : 'tareas'}
                           </span>
                         )}
-                        {emotion && (
-                          <div className="flex items-center gap-1 mt-auto">
-                            <span className="text-base leading-none">{emotion.emoji}</span>
-                            <span
-                              className="w-2 h-2 rounded-full inline-block"
-                              style={{ backgroundColor: emotion.dot }}
-                            />
+                        {emotions.length > 0 && (
+                          <div className="flex items-center gap-1.5 mt-auto flex-wrap">
+                            {emotions.map((em, i) => (
+                              <div key={i} className="flex items-center gap-0.5">
+                                <span className="text-sm leading-none">{em.emoji}</span>
+                                <span
+                                  className="w-1.5 h-1.5 rounded-full inline-block"
+                                  style={{ backgroundColor: em.dot }}
+                                />
+                              </div>
+                            ))}
                           </div>
                         )}
                       </>

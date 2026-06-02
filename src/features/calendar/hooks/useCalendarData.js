@@ -27,7 +27,7 @@ export default function useCalendarData(month, year) {
         items.forEach((item) => {
           const day = parseInt(item.date.split('-')[2], 10)
           map[day] = {
-            emotional_state: item.emotional_state,
+            emotional_states: item.emotional_states ?? [],
             tasks_due_count: item.tasks_due_count,
           }
         })

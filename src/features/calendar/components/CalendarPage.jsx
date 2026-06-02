@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Calendar } from '../Calendar'
 import useCalendarData from '../hooks/useCalendarData'
 import TodayEmotionPanel from './TodayEmotionPanel'
+import CognitiveLoadGauge from './CognitiveLoadGauge'
 
 const CalendarPage = () => {
   const today = new Date()
@@ -33,7 +34,10 @@ const CalendarPage = () => {
           />
         </div>
 
-        <TodayEmotionPanel entry={todayEntry} loading={loading} />
+        <div className="w-64 shrink-0 flex flex-col gap-6">
+          <TodayEmotionPanel entry={todayEntry} loading={loading} />
+          <CognitiveLoadGauge month={month} year={year} />
+        </div>
       </div>
     </div>
   )

@@ -15,3 +15,16 @@ export async function fetchCalendarMonth(userId, month, year) {
 
   return response.json()
 }
+
+export async function fetchCognitiveLoad(userId, month, year) {
+  const monthName = MONTH_NAMES[month - 1]
+  const response = await apiFetch(
+    `/cognitive-load/${encodeURIComponent(userId)}?month=${monthName}&year=${year}`
+  )
+
+  if (!response.ok) {
+    throw new Error('No se pudo cargar la carga cognitiva.')
+  }
+
+  return response.json()
+}

@@ -9,10 +9,12 @@ const EMOTION_DISPLAY = {
 export default function TodayEmotionPanel({ entry, loading }) {
   const today = new Date()
   const todayLabel = today.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })
-  const emotion = entry?.emotional_state ? EMOTION_DISPLAY[entry.emotional_state] : null
+  const states = entry?.emotional_states ?? []
+  const lastState = states[states.length - 1]
+  const emotion = lastState ? EMOTION_DISPLAY[lastState] : null
 
   return (
-    <div className="w-64 shrink-0 bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
+    <div className="bg-white rounded-2xl shadow-sm p-6 flex flex-col gap-3">
       <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Estado emocional</p>
       <p className="text-sm text-[#0b2b2a] font-medium capitalize">{todayLabel}</p>
 
@@ -23,7 +25,7 @@ export default function TodayEmotionPanel({ entry, loading }) {
           <div className="flex items-center gap-3">
             <span className="text-6xl leading-none">{emotion.emoji}</span>
             <span className="text-lg font-bold" style={{ color: emotion.color }}>
-              {entry.emotional_state}
+              {lastState}
             </span>
           </div>
         ) : (
