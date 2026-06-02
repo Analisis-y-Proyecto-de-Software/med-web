@@ -7,77 +7,134 @@ import {
   CalendarHeaderCell,
   Heading,
   Button,
-} from 'react-aria-components';
-import { cx } from '@/utils/cx';
+} from 'react-aria-components'
+import { cx } from '@/utils/cx'
 
 function ChevronLeft() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
-  );
+  )
 }
 
 function ChevronRight() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path d="M6 12l4-4-4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
-  );
+  )
 }
 
-export function Calendar({ className, ...props }) {
+const EMOTION_MAP = {
+  Excelente: { emoji: '😊', dot: '#4ade80' },
+  Bien:      { emoji: '🙂', dot: '#86efac' },
+  Neutral:   { emoji: '😐', dot: '#facc15' },
+  Mal:       { emoji: '😞', dot: '#fb923c' },
+  'Muy Mal': { emoji: '😢', dot: '#f87171' },
+}
+
+export function Calendar({ className, calendarData = {}, loading = false, ...props }) {
   return (
     <AriaCalendar
-      className={cx('inline-flex flex-col gap-4 select-none', className)}
+      isReadOnly
+      className={cx('flex flex-col gap-6 w-full select-none', className)}
       {...props}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-4">
         <Button
           slot="previous"
-          className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer"
+          className="flex items-center justify-center w-10 h-10 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#00343a] cursor-pointer"
         >
           <ChevronLeft />
         </Button>
 
-        <Heading className="text-sm font-semibold text-gray-900 flex-1 text-center" />
+        <div className="flex-1 flex items-center justify-center gap-2">
+          <Heading className="text-xl font-bold text-[#0b2b2a] capitalize" />
+          {loading && (
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#00343a]" />
+          )}
+        </div>
 
         <Button
           slot="next"
-          className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer"
+          className="flex items-center justify-center w-10 h-10 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[#00343a] cursor-pointer"
         >
           <ChevronRight />
         </Button>
       </div>
 
-      {/* Grid */}
-      <CalendarGrid className="w-full border-collapse">
+      <CalendarGrid className="w-full table-fixed border-separate border-spacing-1">
         <CalendarGridHeader>
           {(day) => (
-            <CalendarHeaderCell className="text-xs font-medium text-gray-400 pb-2 text-center w-10">
+            <CalendarHeaderCell className="text-sm font-semibold text-gray-400 pb-3 text-center">
               {day}
             </CalendarHeaderCell>
           )}
         </CalendarGridHeader>
         <CalendarGridBody>
-          {(date) => (
-            <CalendarCell
-              date={date}
-              className={({ isSelected, isDisabled, isUnavailable, isFocusVisible, isOutsideMonth }) =>
-                cx(
-                  'text-sm w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-colors outline-none',
-                  isOutsideMonth && 'text-gray-300',
-                  !isOutsideMonth && !isSelected && !isDisabled && 'text-gray-700 hover:bg-gray-100',
-                  isSelected && 'bg-blue-600 text-white font-semibold hover:bg-blue-700',
-                  (isDisabled || isUnavailable) && 'text-gray-300 cursor-not-allowed',
-                  isFocusVisible && 'ring-2 ring-blue-500 ring-offset-1',
-                )
-              }
-            />
-          )}
+          {(date) => {
+            const entry = calendarData[date.day]
+            const emotion = entry?.emotional_state ? EMOTION_MAP[entry.emotional_state] : null
+            const taskCount = entry?.tasks_due_count ?? 0
+            const hasContent = emotion || taskCount > 0
+
+            return (
+              <CalendarCell
+                date={date}
+                className={({ isToday, isOutsideMonth, isFocusVisible }) =>
+                  cx(
+                    'rounded-xl transition-colors outline-none cursor-default align-top overflow-hidden',
+                    isOutsideMonth
+                      ? 'opacity-25 bg-gray-50'
+                      : 'bg-white border border-gray-100 shadow-sm',
+                    isToday && 'bg-[#00343a]! border-[#00343a]! text-white',
+                    isFocusVisible && 'ring-2 ring-[#00343a] ring-offset-1',
+                  )
+                }
+              >
+                {({ isToday, isOutsideMonth }) => (
+                  <div className="flex flex-col p-2" style={{ height: '6rem' }}>
+                    <span
+                      className={cx(
+                        'text-sm font-bold',
+                        isToday ? 'text-white' : 'text-[#0b2b2a]',
+                        isOutsideMonth && 'text-gray-300',
+                      )}
+                    >
+                      {date.day}
+                    </span>
+
+                    {hasContent && !isOutsideMonth && (
+                      <>
+                        {taskCount > 0 && (
+                          <span
+                            className={cx(
+                              'text-xs mt-1',
+                              isToday ? 'text-white/80' : 'text-gray-400',
+                            )}
+                          >
+                            {taskCount} {taskCount === 1 ? 'tarea' : 'tareas'}
+                          </span>
+                        )}
+                        {emotion && (
+                          <div className="flex items-center gap-1 mt-auto">
+                            <span className="text-base leading-none">{emotion.emoji}</span>
+                            <span
+                              className="w-2 h-2 rounded-full inline-block"
+                              style={{ backgroundColor: emotion.dot }}
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </CalendarCell>
+            )
+          }}
         </CalendarGridBody>
       </CalendarGrid>
     </AriaCalendar>
-  );
+  )
 }
