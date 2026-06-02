@@ -1,3 +1,9 @@
+import CalendarFeaturePage from '../features/calendar/components/CalendarPage'
+
 export default function CalendarPage() {
-  return <section className="h-full min-h-[82vh] bg-[#f8f9fa]" />
+  return (
+    <section className="h-full min-h-[82vh] bg-[#f8f9fa] p-4">
+      <CalendarFeaturePage />
+    </section>
+  )
 }

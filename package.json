@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.15.3",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^9.0.1",
+    "@mui/x-charts": "^9.3.0",
     "@untitledui/icons": "^0.0.22",
     "aws-amplify": "^6.16.4",
     "axios": "^1.15.2",
