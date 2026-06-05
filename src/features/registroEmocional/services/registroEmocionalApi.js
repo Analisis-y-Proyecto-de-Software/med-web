@@ -1,10 +1,30 @@
 import { apiFetch } from '../../../services/apiClient'
 
-export async function fetchEmotionalRecords(userId, date) {
+/**
+ * Obtiene los registros emocionales de un usuario, permitiendo filtrar por fecha, por estado o por ambos.
+ * @param {string} userId - Identificador único del usuario.
+ * @param {string|null} date - Fecha en formato YYYY-MM-DD (Opcional).
+ * @param {number|null} stateId - ID del estado emocional (Opcional).
+ */
+export async function fetchEmotionalRecords(userId, date, stateId) {
   let path = `/emotionalrecords/${encodeURIComponent(userId)}/list`
 
+  // 1. Creamos un objeto para administrar los Query Parameters de forma segura
+  const params = new URLSearchParams()
+
+  // 2. Agregamos los parámetros únicamente si contienen un valor válido
   if (date) {
-    path += `?date=${encodeURIComponent(date)}`
+    params.append('date', date)
+  }
+  
+  if (stateId) {
+    params.append('stateId', stateId)
+  }
+
+  // 3. Convertimos los parámetros a texto y los unimos al camino base si existen
+  const queryString = params.toString()
+  if (queryString) {
+    path += `?${queryString}`
   }
 
   const response = await apiFetch(path)
@@ -16,7 +36,7 @@ export async function fetchEmotionalRecords(userId, date) {
   return response.json()
 }
 
-// CORRECCIÓN: Código simplificado y apuntando directamente a la ruta unificada
+// Guarda un nuevo registro emocional apuntando a la ruta de creación
 export async function submitEmotionalRecord(userId, payload) {
   const path = `/emotionalrecords/${encodeURIComponent(userId)}/create`
 

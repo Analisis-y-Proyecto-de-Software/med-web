@@ -14,6 +14,8 @@ export default function RegistroEmocionalPage() {
     selectedDate,
     setSelectedDate,
     submitRecord,
+    selectedStateId,    // <--- Asegúrate de agregar esta
+    setSelectedStateId
   } = useRegistroEmocional()
 
   return (
@@ -50,6 +52,8 @@ export default function RegistroEmocionalPage() {
             error={error}
             selectedDate={selectedDate}
             onSelectedDateChange={(e) => setSelectedDate(e.value)}
+            selectedStateId={selectedStateId}           
+            onSelectedStateChange={setSelectedStateId}
           />
         </div>
       </div>

@@ -22,11 +22,12 @@ export default function useRegistroEmocional() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [selectedDate, setSelectedDate] = useState(null)
+  const [selectedStateId, setSelectedStateId] = useState(null) // Nuevo estado para el filtro de emoción
 
   useEffect(() => {
     let isMounted = true
 
-    const loadRecords = async (date) => {
+    const loadRecords = async (date, stateId) => {
       setLoading(true)
       setError('')
 
@@ -35,11 +36,12 @@ export default function useRegistroEmocional() {
         const userId = currentUser?.userId || currentUser?.username
 
         if (!userId) {
-          throw new Error('No se encontro el usuario actual.')
+          throw new Error('No se encontró el usuario actual.')
         }
 
         const formattedDate = formatDateFilter(date)
-        const data = await fetchEmotionalRecords(userId, formattedDate)
+        // Enviamos tanto la fecha como el ID de estado a la API
+        const data = await fetchEmotionalRecords(userId, formattedDate, stateId)
         const list = Array.isArray(data)
           ? data
           : (data?.items || data?.data || [])
@@ -58,12 +60,12 @@ export default function useRegistroEmocional() {
       }
     }
 
-    void loadRecords(selectedDate)
+    void loadRecords(selectedDate, selectedStateId)
 
     return () => {
       isMounted = false
     }
-  }, [selectedDate])
+  }, [selectedDate, selectedStateId]) // Se dispara al cambiar fecha o estado
 
   return {
     records,
@@ -71,6 +73,8 @@ export default function useRegistroEmocional() {
     error,
     selectedDate,
     setSelectedDate,
+    selectedStateId,    // Expuesto para el componente visual
+    setSelectedStateId, // Expuesto para limpiar o asignar el filtro
     submitRecord: async ({ name, id }) => {
       setLoading(true)
       setError('')
@@ -80,7 +84,7 @@ export default function useRegistroEmocional() {
         const userId = currentUser?.userId || currentUser?.username
 
         if (!userId) {
-          throw new Error('No se encontro el usuario actual.')
+          throw new Error('No se encontró el usuario actual.')
         }
 
         const payload = {
