@@ -7,7 +7,14 @@ import sonrisa from '../assets/sonrisa.png'
 import corazones from '../assets/corazones.png'
 
 export default function RegistroEmocionalPage() {
-  const { records, loading, error, submitRecord } = useRegistroEmocional()
+  const {
+    records,
+    loading,
+    error,
+    selectedDate,
+    setSelectedDate,
+    submitRecord,
+  } = useRegistroEmocional()
 
   return (
     <section className="h-full bg-[#f8f9fa]">
@@ -37,7 +44,13 @@ export default function RegistroEmocionalPage() {
         </header>
 
         <div className="flex-1 min-h-0">
-          <RegistroEmocionalList records={records} loading={loading} error={error} />
+          <RegistroEmocionalList
+            records={records}
+            loading={loading}
+            error={error}
+            selectedDate={selectedDate}
+            onSelectedDateChange={(e) => setSelectedDate(e.value)}
+          />
         </div>
       </div>
     </section>

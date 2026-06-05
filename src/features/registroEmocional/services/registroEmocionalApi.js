@@ -1,7 +1,13 @@
 import { apiFetch } from '../../../services/apiClient'
 
-export async function fetchEmotionalRecords(userId) {
-  const response = await apiFetch(`/emotionalrecords/${encodeURIComponent(userId)}/list`)
+export async function fetchEmotionalRecords(userId, date) {
+  let path = `/emotionalrecords/${encodeURIComponent(userId)}/list`
+
+  if (date) {
+    path += `?date=${encodeURIComponent(date)}`
+  }
+
+  const response = await apiFetch(path)
 
   if (!response.ok) {
     throw new Error('No se pudieron cargar los registros.')

@@ -1,3 +1,4 @@
+import { Calendar } from 'primereact/calendar'
 import corazones from '../../../assets/corazones.png'
 import enfadado from '../../../assets/enfadado.png'
 import meh from '../../../assets/meh.png'
@@ -69,7 +70,7 @@ const getEmotionIcon = (record) => {
   return EMOTION_BY_ID[id] || sonrisa
 }
 
-export default function RegistroEmocionalList({ records, loading, error }) {
+export default function RegistroEmocionalList({ records, loading, error, selectedDate, onSelectedDateChange }) {
   const renderContent = () => {
     if (loading) {
       return (
@@ -119,12 +120,39 @@ export default function RegistroEmocionalList({ records, loading, error }) {
 
   return (
     <div className="h-full rounded-[22px] border border-[#7b9c93] bg-[#7ea79b] p-5 shadow-[0_10px_24px_rgba(0,0,0,0.1)] flex flex-col">
-      <div className="flex items-center justify-between px-4 text-2xl font-semibold text-[#0c2a2b]">
-        <span className="flex items-center gap-2">
+      <div className="flex items-center justify-between px-4 text-[#0c2a2b]">
+        
+        {/* CONTENEDOR DE FECHA CON ALINEACIÓN PERFECTA */}
+        <div className="relative flex items-center gap-2 text-2xl font-semibold cursor-pointer select-none">
           Fecha
           <span className="inline-block h-0 w-0 border-l-4 border-r-4 border-t-6 border-l-transparent border-r-transparent border-t-[#0c2a2b]" />
-        </span>
-        <span className="flex items-center gap-2">
+
+          {/* Forzamos al componente y a su input interno a ocupar exactamente el 100% del texto */}
+          <Calendar
+            value={selectedDate}
+            onChange={onSelectedDateChange}
+            appendTo={typeof window !== 'undefined' ? document.body : null}
+            dateFormat="yy-mm-dd"
+            style={{ 
+              position: 'absolute', 
+              top: 0, 
+              left: 0, 
+              width: '100%', 
+              height: '100%', 
+              opacity: 0, 
+              zIndex: 10, 
+              cursor: 'pointer' 
+            }}
+            inputStyle={{ 
+              width: '100%', 
+              height: '100%', 
+              cursor: 'pointer' 
+            }}
+          />
+        </div>
+
+        {/* CONTENEDOR DE ESTADO */}
+        <span className="flex items-center gap-2 text-2xl font-semibold">
           Estado
           <span className="inline-block h-0 w-0 border-l-4 border-r-4 border-t-6 border-l-transparent border-r-transparent border-t-[#0c2a2b]" />
         </span>

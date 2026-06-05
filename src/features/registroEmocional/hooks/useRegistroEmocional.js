@@ -5,15 +5,28 @@ import {
   submitEmotionalRecord,
 } from '../services/registroEmocionalApi'
 
+const formatDateFilter = (date) => {
+  if (!date) return null
+  const normalizedDate = date instanceof Date ? date : new Date(date)
+  if (Number.isNaN(normalizedDate.getTime())) return null
+
+  const year = normalizedDate.getFullYear()
+  const month = String(normalizedDate.getMonth() + 1).padStart(2, '0')
+  const day = String(normalizedDate.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}
+
 export default function useRegistroEmocional() {
   const [records, setRecords] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [selectedDate, setSelectedDate] = useState(null)
 
   useEffect(() => {
     let isMounted = true
 
-    const loadRecords = async () => {
+    const loadRecords = async (date) => {
       setLoading(true)
       setError('')
 
@@ -25,7 +38,8 @@ export default function useRegistroEmocional() {
           throw new Error('No se encontro el usuario actual.')
         }
 
-        const data = await fetchEmotionalRecords(userId)
+        const formattedDate = formatDateFilter(date)
+        const data = await fetchEmotionalRecords(userId, formattedDate)
         const list = Array.isArray(data)
           ? data
           : (data?.items || data?.data || [])
@@ -44,17 +58,19 @@ export default function useRegistroEmocional() {
       }
     }
 
-    void loadRecords()
+    void loadRecords(selectedDate)
 
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [selectedDate])
 
   return {
     records,
     loading,
     error,
+    selectedDate,
+    setSelectedDate,
     submitRecord: async ({ name, id }) => {
       setLoading(true)
       setError('')
