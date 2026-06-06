@@ -25,11 +25,11 @@ export default function RegistroEmocionalPage() {
           <h2 className="text-2xl font-semibold text-[#0b2b2a]">Registra tu estado emocional</h2>
           <div className="flex flex-wrap items-center justify-center gap-4">
             {[
-              { id: 1, src: enfadado, alt: 'Enfadado', name: 'enfadado' },
-              { id: 2, src: triste, alt: 'Triste', name: 'triste' },
-              { id: 3, src: meh, alt: 'Neutral', name: 'neutral' },
-              { id: 4, src: sonrisa, alt: 'Feliz', name: 'feliz' },
-              { id: 5, src: corazones, alt: 'Muy feliz', name: 'muy bien' },
+              { id: 5, src: enfadado, alt: 'Muy Mal', name: 'Muy Mal' },
+              { id: 4, src: triste, alt: 'Mal', name: 'Mal' },
+              { id: 3, src: meh, alt: 'Neutral', name: 'Neutral' },
+              { id: 2, src: sonrisa, alt: 'Bien', name: 'Bien' },
+              { id: 1, src: corazones, alt: 'Excelente', name: 'Excelente' },
             ].map((item) => (
               <button
                 key={item.id}
