@@ -7,11 +7,11 @@ import sonrisa from '../../../assets/sonrisa.png'
 import triste from '../../../assets/triste.png'
 
 const EMOTION_BY_ID = {
-  1: { icon: corazones, label: 'Excelente' },
-  2: { icon: sonrisa, label: 'Bien' },
+  1: { icon: enfadado, label: 'Muy Mal' },
+  2: { icon: triste, label: 'Mal' },
   3: { icon: meh, label: 'Neutral' },
-  4: { icon: triste, label: 'Mal' },
-  5: { icon: enfadado, label: 'Muy Mal' },
+  4: { icon: sonrisa, label: 'Feliz' },
+  5: { icon: corazones, label: 'Excelente' },
 }
 
 const formatRecordDate = (value) => {
