@@ -21,7 +21,7 @@ export default function useCalendarData(month, year) {
         if (!userId) throw new Error('Usuario no encontrado.')
 
         const data = await fetchCalendarMonth(userId, month, year)
-        const items = data?.data || []
+        const items = Array.isArray(data) ? data : (data?.data || [])
 
         const map = {}
         items.forEach((item) => {
