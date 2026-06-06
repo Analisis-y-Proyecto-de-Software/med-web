@@ -19,26 +19,13 @@ const formatRecordDate = (value) => {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return 'Sin fecha'
 
-  const now = new Date()
-  const isToday =
-    date.getFullYear() === now.getFullYear() &&
-    date.getMonth() === now.getMonth() &&
-    date.getDate() === now.getDate()
-
-  if (isToday) {
-    const time = new Intl.DateTimeFormat('es-AR', {
-      hour: 'numeric',
-      minute: '2-digit',
-    }).format(date)
-    return `Hoy, ${time}`
-  }
-
-  return new Intl.DateTimeFormat('es-AR', {
+  return new Intl.DateTimeFormat('es-CO', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
     hour: 'numeric',
     minute: '2-digit',
+    timeZone: 'UTC',
   }).format(date)
 }
 
@@ -54,8 +41,8 @@ export default function RegistroEmocionalList({
   const [showStateOverlay, setShowStateOverlay] = useState(false)
 
   const handleStateClick = (id) => {
-    onSelectedStateChange(id)
-    setShowStateOverlay(false) // Cierra al seleccionar
+    onSelectedStateChange(selectedStateId === id ? null : id)
+    setShowStateOverlay(false)
   }
 
   const renderContent = () => {

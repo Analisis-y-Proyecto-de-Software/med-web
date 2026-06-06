@@ -51,7 +51,7 @@ export default function RegistroEmocionalPage() {
             loading={loading}
             error={error}
             selectedDate={selectedDate}
-            onSelectedDateChange={(e) => setSelectedDate(e.value)}
+            onSelectedDateChange={setSelectedDate}
             selectedStateId={selectedStateId}           
             onSelectedStateChange={setSelectedStateId}
           />

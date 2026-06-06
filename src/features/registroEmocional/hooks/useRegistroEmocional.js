@@ -87,10 +87,13 @@ export default function useRegistroEmocional() {
           throw new Error('No se encontró el usuario actual.')
         }
 
+        const now = new Date()
+        const localISO = new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, -1)
+
         const payload = {
           name: name || undefined,
           emotional_state_id: id || undefined,
-          created_at: new Date().toISOString(),
+          created_at: localISO,
         }
 
         const created = await submitEmotionalRecord(userId, payload)
