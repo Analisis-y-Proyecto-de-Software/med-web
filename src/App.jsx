@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import 'primereact/resources/themes/lara-light-indigo/theme.css'
+import 'primereact/resources/primereact.min.css'
+import 'primeicons/primeicons.css'
 import { getCurrentUser, signOut } from 'aws-amplify/auth'
 import { Hub } from 'aws-amplify/utils'
 import { Link, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
